@@ -4,16 +4,16 @@ using UnityEngine;
 namespace SkyTools
 {
     // 코드로 생성하는 로우폴리 침엽수(전나무). 참고 이미지 실루엣 재현:
-    // 갈색 줄기 + 위로 갈수록 작아지는 원뿔 스커트 N단. 단 가장자리(림)를 정점별로 불규칙하게
-    // 흔들어 들쭉날쭉한 나뭇가지 느낌. 색은 코드 생성 세로 그라데이션 텍스처(아래 진녹→위 연녹).
+    // 갈색 줄기 + 위로 갈수록 작아지는 원뿔 스커트 N단. 단 가장자리(림)를 스캘럽(부채꼴 물결)+불규칙으로
+    // 흔들어 들쭉날쭉. 위 단은 굵고 짧게 → 길쭉한 침 대신 뭉툭한 꼭대기. 색은 단별 진녹(그늘)→연녹 그라데이션.
     // 메시/머티리얼은 정적 캐시(모든 나무가 공유) → 경량. 스케일/회전만 다르게 흩뿌리면 됨.
     public static class ProceduralTree
     {
-        const int Seg = 12;        // 원뿔 둘레 분할(낮을수록 각진 로우폴리)
-        const int Tiers = 6;       // 스커트 단 수(많을수록 풍성)
+        const int Seg = 16;        // 원뿔 둘레 분할(스캘럽 물결 표현 위해 늘림)
+        const int Tiers = 7;       // 스커트 단 수(많을수록 풍성)
         const float TrunkH = 0.7f; // 줄기 높이
-        const float CanopyH = 3.4f;// 잎 전체 높이
-        const float BottomR = 1.5f, TopR = 0.30f;  // 밑단 넓게/꼭대기 뭉툭(덜 뾰족)
+        const float CanopyH = 3.2f;// 잎 전체 높이
+        const float BottomR = 1.8f, TopR = 0.5f;   // 꼭대기 단도 굵게 → 뭉툭한 점
 
         static Mesh canopyMesh, trunkMesh;
         static Material leafMat, trunkMat;
@@ -67,8 +67,8 @@ namespace SkyTools
         }
 
 
-        // 원뿔 스커트 N단을 한 메시로. 단마다 풍성하게 겹치고, 림을 정점별로 불규칙하게(반경 ±, 아래 드룹)
-        // 흔들어 들쭉날쭉. UV.v를 나무 전체 높이 기준으로 매핑 → 아래 진녹 → 위 연녹 그라데이션.
+        // 원뿔 스커트 N단을 한 메시로. 강하게 겹쳐 풍성하게, 위 단은 굵고 짧게(뭉툭). 림은 스캘럽+불규칙으로
+        // 아래로 드룹시켜 들쭉날쭉. UV.v는 단마다 같은 패턴(바닥 진녹→위 연녹) → 층이 도드라짐.
         static Mesh BuildCanopyMesh()
         {
             var verts = new List<Vector3>();
@@ -78,26 +78,25 @@ namespace SkyTools
             for (int i = 0; i < Tiers; i++)
             {
                 float frac = i / (float)(Tiers - 1);
-                float by = TrunkH + CanopyH * (i / (float)Tiers) * 0.78f;   // 더 겹쳐 풍성하게(덜 뾰족)
+                float by = TrunkH + CanopyH * (i / (float)Tiers) * 0.70f;   // 강하게 겹쳐 풍성/덜 뾰족
                 float r = Mathf.Lerp(BottomR, TopR, frac);
-                float span = (CanopyH / Tiers) * Mathf.Lerp(1.9f, 1.15f, frac);  // 위로 갈수록 원뿔 짧게 → 뭉툭
-                float apexY = by + span;
+                float span = (CanopyH / Tiers) * Mathf.Lerp(1.6f, 0.7f, frac);  // 위 단 확 짧게 → 뭉툭
 
-                float baseV = Mathf.Lerp(0.12f, 0.72f, frac);   // 단별 그라데이션 기준값
                 int baseIdx = verts.Count;
                 for (int s = 0; s < Seg; s++)
                 {
                     float a = (s / (float)Seg) * Mathf.PI * 2f;
-                    float h1 = Hash(s * 1.7f + i * 9.3f);
-                    float h2 = Hash(s * 3.1f + i * 4.7f + 11.1f);
-                    float rr = r * (1f + (h1 - 0.5f) * 0.30f);        // 반경 ±15%(가장자리 들쭉날쭉)
-                    float yy = by - span * 0.20f * (0.4f + h2);       // 림이 아래로 드룹 + 불규칙
+                    float lobe = Mathf.Sin(a * 6f);                   // 6개 부채꼴 스캘럽
+                    float h = Hash(s * 3.1f + i * 7.7f);
+                    float rr = r * (1f + 0.12f * lobe + (h - 0.5f) * 0.16f);   // 스캘럽 + 불규칙 반경
+                    float trough = 1f - (lobe * 0.5f + 0.5f);          // 골(아래로 깊게 드룹)
+                    float yy = by - span * (0.10f + 0.16f * trough) * (0.7f + 0.6f * h);
                     verts.Add(new Vector3(Mathf.Cos(a) * rr, yy, Mathf.Sin(a) * rr));
-                    uvs.Add(new Vector2(s / (float)Seg, baseV + h2 * 0.05f));
+                    uvs.Add(new Vector2(s / (float)Seg, 0.05f + h * 0.04f));
                 }
                 int apexIdx = verts.Count;
-                verts.Add(new Vector3(0f, apexY, 0f));
-                uvs.Add(new Vector2(0.5f, Mathf.Min(0.98f, baseV + 0.24f)));
+                verts.Add(new Vector3(0f, by + span, 0f));
+                uvs.Add(new Vector2(0.5f, 0.92f));
 
                 for (int s = 0; s < Seg; s++)
                 {
@@ -148,18 +147,18 @@ namespace SkyTools
         }
 
 
-        // 세로 그라데이션 잎 텍스처: 아래 진녹 → 위 연녹 + 약한 노이즈(생기).
+        // 세로 그라데이션 잎 텍스처: 아래 진녹(그늘) → 빠르게 중간 연녹 → 위 밝은 연녹 + 약한 노이즈.
         static Texture2D MakeLeafGradient()
         {
             int W = 16, H = 64;
             var tex = new Texture2D(W, H, TextureFormat.RGB24, true) { name = "TreeLeafGradient" };
-            Color bottom = new Color(0.13f, 0.33f, 0.16f);
-            Color mid = new Color(0.27f, 0.50f, 0.23f);
-            Color top = new Color(0.56f, 0.78f, 0.38f);
+            Color bottom = new Color(0.10f, 0.27f, 0.13f);
+            Color mid = new Color(0.30f, 0.55f, 0.26f);
+            Color top = new Color(0.58f, 0.82f, 0.42f);
             for (int y = 0; y < H; y++)
             {
                 float v = y / (float)(H - 1);
-                Color c = v < 0.5f ? Color.Lerp(bottom, mid, v / 0.5f) : Color.Lerp(mid, top, (v - 0.5f) / 0.5f);
+                Color c = v < 0.35f ? Color.Lerp(bottom, mid, v / 0.35f) : Color.Lerp(mid, top, (v - 0.35f) / 0.65f);
                 for (int x = 0; x < W; x++)
                 {
                     float n = Mathf.PerlinNoise(x * 0.5f, y * 0.25f);
