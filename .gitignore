@@ -1,0 +1,20 @@
+# Unity / IDE 생성물 (이 레포는 UPM 패키지 소스만 추적)
+Library/
+Temp/
+Obj/
+obj/
+Build/
+Builds/
+Logs/
+UserSettings/
+*.csproj
+*.sln
+*.user
+*.unityproj
+.vs/
+.idea/
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
