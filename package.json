@@ -1,6 +1,6 @@
 {
   "name": "com.shinejh.skytools",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "displayName": "Sky Tools",
   "description": "Unity 에디터 툴 모음. 절차적 로우폴리 나무 생성(ProceduralTree) + 파라미터 기반 배치 툴(Tree Placement Tool) 등. Claude Code + Unity MCP로 제작/확장.",
   "unity": "2022.3",
