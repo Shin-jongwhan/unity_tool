@@ -4,7 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 
-namespace SkyTools
+namespace Procedural
 {
     // 나무 배치 에디터 툴: 절차 나무(ProceduralTree) + 임의 프리팹 나무를 파라미터를 조절하며
     // 씬에 흩뿌려 배치한다. 절차 나무 메시/머티리얼/텍스처는 에셋으로 저장되어 씬 저장 후에도 유지된다.
@@ -32,7 +32,7 @@ namespace SkyTools
         Mesh canopyAsset, trunkAsset;
         Material leafMatAsset, trunkMatAsset;
 
-        [MenuItem("Tools/Sky Tools/Tree Placement Tool")]
+        [MenuItem("Tools/Procedural/Tree Placement")]
         static void Open()
         {
             GetWindow<TreePlacementTool>("Tree Placement").minSize = new Vector2(340, 460);

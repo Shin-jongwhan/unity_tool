@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace SkyTools
+namespace Procedural
 {
     // 코드로 생성하는 로우폴리 침엽수(전나무). 참고 이미지 실루엣 재현:
     // 갈색 줄기 + 위로 갈수록 작아지는 원뿔 스커트 N단. 단 가장자리(림)를 스캘럽(부채꼴 물결)+불규칙으로

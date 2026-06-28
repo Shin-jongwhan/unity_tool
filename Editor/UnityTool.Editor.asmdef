@@ -1,8 +1,8 @@
 {
-    "name": "SkyTools.Editor",
-    "rootNamespace": "SkyTools",
+    "name": "UnityTool.Editor",
+    "rootNamespace": "",
     "references": [
-        "SkyTools.Runtime"
+        "UnityTool.Runtime"
     ],
     "includePlatforms": [
         "Editor"

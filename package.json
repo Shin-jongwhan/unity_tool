@@ -1,9 +1,9 @@
 {
-  "name": "com.shinejh.skytools",
-  "version": "0.1.2",
-  "displayName": "Sky Tools",
-  "description": "Unity 에디터 툴 모음. 절차적 로우폴리 나무 생성(ProceduralTree) + 파라미터 기반 배치 툴(Tree Placement Tool) 등. Claude Code + Unity MCP로 제작/확장.",
+  "name": "com.shinejh.unitytool",
+  "version": "0.2.0",
+  "displayName": "Unity Tool",
+  "description": "Unity 에디터/런타임 툴 모음. 카테고리별 정리(VFX, Procedural 등). Claude Code + Unity MCP로 제작/확장.",
   "unity": "2022.3",
-  "keywords": [ "tools", "editor", "procedural", "lowpoly", "trees" ],
+  "keywords": [ "tools", "editor", "vfx", "procedural" ],
   "author": { "name": "shinejh" }
 }

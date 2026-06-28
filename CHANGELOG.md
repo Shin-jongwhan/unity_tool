@@ -1,5 +1,20 @@
 # Changelog
 
+## [0.2.0] - 2026-06-28
+### Changed
+- 패키지 리네임: **Sky Tools → Unity Tool** (`com.shinejh.skytools` → `com.shinejh.unitytool`,
+  어셈블리 `SkyTools.*` → `UnityTool.*`). 카테고리별 정리 구조로 전환.
+- 기존 나무 툴을 `Procedural` 카테고리로 이동 (메뉴 `Tools > Procedural > Tree Placement`).
+
+### Added
+- **VFX / 2D / Laser Impact** — 2D 레이저 명중 이펙트 툴.
+  - `LaserImpactVFX` (Runtime): 섬광+불똥+잔광 3겹 파티클을 파라미터로 생성하는 팩토리.
+    2D용 `Sprites/Default` 셰이더로 알파 보존(URP 파티클 '흰 네모' 회피).
+  - `LaserImpactPreset` (ScriptableObject): 색·파라미터 레시피 저장.
+  - `LaserImpactPlayer` (Component): 씬 오브젝트에서 프리셋 재생(playOnEnable / Play()).
+  - 에디터 툴 `Tools > VFX > 2D > Laser Impact`: 독립 미리보기 화면(루프 재생), 랜덤 파라미터,
+    프리셋 내보내기/불러오기.
+
 ## [0.1.2] - 2026-06-21
 ### Changed
 - `ProceduralTree` 2차 개선: 꼭대기 침(spike) 제거(위 단 굵고 짧게, 전체 높이↓), 림을 스캘럽(부채꼴 물결)

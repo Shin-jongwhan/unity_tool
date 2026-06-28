@@ -1,6 +1,6 @@
 {
-    "name": "SkyTools.Runtime",
-    "rootNamespace": "SkyTools",
+    "name": "UnityTool.Runtime",
+    "rootNamespace": "",
     "references": [],
     "includePlatforms": [],
     "excludePlatforms": [],
